@@ -9,10 +9,23 @@
   (function () {
     var saved = localStorage.getItem("theme");
     if (saved) document.documentElement.setAttribute("data-theme", saved);
+    if (localStorage.getItem("site-unlocked") === "true") {
+      document.documentElement.classList.add("unlocked");
+    }
   })();
 </script>
 </head>
 <body>
+  <div id="lock-screen">
+    <form id="lock-form">
+      <h2>This board is locked</h2>
+      <p>Enter the password to view it.</p>
+      <input type="password" id="lock-password" placeholder="Password" autocomplete="off" autofocus>
+      <button type="submit">Unlock</button>
+      <p id="lock-error" class="lock-error" hidden>Incorrect password.</p>
+    </form>
+  </div>
+
   <div class="page">
 
     <button id="theme-toggle" aria-label="Toggle light/dark theme">🌙</button>

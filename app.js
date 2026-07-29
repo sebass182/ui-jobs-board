@@ -16,6 +16,20 @@ let allJobs = [];
 let activeLocation = "";
 let salaryOnly = false;
 
+const SITE_PASSWORD = "charlevoix";
+
+document.getElementById("lock-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const input = document.getElementById("lock-password");
+  if (input.value === SITE_PASSWORD) {
+    localStorage.setItem("site-unlocked", "true");
+    document.documentElement.classList.add("unlocked");
+  } else {
+    document.getElementById("lock-error").hidden = false;
+    input.value = "";
+  }
+});
+
 function escapeHtml(str) {
   return String(str ?? "").replace(/[&<>"']/g, (c) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
