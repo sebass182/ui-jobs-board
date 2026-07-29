@@ -7,8 +7,6 @@
 <link rel="stylesheet" href="styles.css">
 <script>
   (function () {
-    var saved = localStorage.getItem("theme");
-    if (saved) document.documentElement.setAttribute("data-theme", saved);
     if (localStorage.getItem("site-unlocked") === "true") {
       document.documentElement.classList.add("unlocked");
     }
@@ -27,8 +25,6 @@
   </div>
 
   <div class="page">
-
-    <button id="theme-toggle" aria-label="Toggle light/dark theme">🌙</button>
 
     <section class="hero">
       <p class="overline">Live from public job boards</p>

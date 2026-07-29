@@ -252,25 +252,6 @@ document.getElementById("filter-salary").addEventListener("click", (e) => {
   applyFiltersAndRender();
 });
 
-function currentTheme() {
-  const attr = document.documentElement.getAttribute("data-theme");
-  if (attr) return attr;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-}
-
-function updateThemeToggleIcon() {
-  document.getElementById("theme-toggle").textContent = currentTheme() === "dark" ? "☀️" : "🌙";
-}
-
-document.getElementById("theme-toggle").addEventListener("click", () => {
-  const next = currentTheme() === "dark" ? "light" : "dark";
-  document.documentElement.setAttribute("data-theme", next);
-  localStorage.setItem("theme", next);
-  updateThemeToggleIcon();
-});
-
-updateThemeToggleIcon();
-
 document.getElementById("refresh").addEventListener("click", loadJobs);
 
 loadJobs();
