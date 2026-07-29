@@ -344,10 +344,33 @@ html.unlocked #lock-screen {
 .tag.hybrid { color: var(--hybrid); background: var(--hybrid-bg); border-color: transparent; }
 .tag.onsite { color: var(--onsite); background: var(--onsite-bg); border-color: transparent; }
 
+.job-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-top: auto;
+}
+
 .job-date {
   font-size: 0.75rem;
   color: var(--muted);
-  margin-top: auto;
+}
+
+.apply-button {
+  border: none;
+  border-radius: 999px;
+  padding: 0.4rem 1rem;
+  background: var(--navy);
+  color: var(--card-bg);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.apply-button:hover {
+  opacity: 0.9;
 }
 
 footer {

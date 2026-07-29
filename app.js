@@ -185,7 +185,10 @@ function render(jobs) {
         <span class="tag">${escapeHtml(j.salaryText || "Salary n/a")}</span>
         <span class="tag">${escapeHtml(j.source)}</span>
       </div>
-      <div class="job-date">${j.date ? escapeHtml(j.date.toLocaleDateString()) : ""}</div>
+      <div class="job-card-bottom">
+        <div class="job-date">${j.date ? escapeHtml(j.date.toLocaleDateString()) : ""}</div>
+        <a class="apply-button" href="${encodeURI(j.url)}" target="_blank" rel="noopener">Apply</a>
+      </div>
     </div>
   `).join("");
 }
