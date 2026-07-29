@@ -46,12 +46,18 @@ function isDesignRole(title, extraText = "") {
   return DESIGN_KEYWORDS.test(title) || DESIGN_KEYWORDS.test(extraText);
 }
 
+const TARGET_COUNTRIES = /canada|usa|u\.s\.a\.?|united states|\bus\b|worldwide/i;
+
+function isTargetLocation(raw) {
+  return TARGET_COUNTRIES.test(raw || "");
+}
+
 async function fetchJobicy() {
   const res = await fetch("https://jobicy.com/api/v2/remote-jobs?count=100&tag=design");
   if (!res.ok) throw new Error(`Jobicy: ${res.status}`);
   const data = await res.json();
   return data.jobs
-    .filter((j) => isDesignRole(j.jobTitle, (j.jobIndustry || []).join(" ")))
+    .filter((j) => isDesignRole(j.jobTitle, (j.jobIndustry || []).join(" ")) && isTargetLocation(j.jobGeo))
     .map((j) => {
       const hasSalary = typeof j.salaryMin === "number" && j.salaryMin > 0;
       const salaryValue = hasSalary ? (j.salaryMax || j.salaryMin) : null;
@@ -80,7 +86,7 @@ async function fetchArbeitnow() {
   if (!res.ok) throw new Error(`Arbeitnow: ${res.status}`);
   const data = await res.json();
   return data.data
-    .filter((j) => isDesignRole(j.title, (j.tags || []).join(" ")))
+    .filter((j) => isDesignRole(j.title, (j.tags || []).join(" ")) && isTargetLocation(j.location))
     .map((j) => ({
       id: `arbeitnow-${j.slug}`,
       title: j.title,
@@ -94,6 +100,15 @@ async function fetchArbeitnow() {
       date: j.created_at ? new Date(j.created_at * 1000) : null,
       source: "Arbeitnow",
     }));
+}
+
+async function fetchScraped() {
+  const res = await fetch("scraped-jobs.json", { cache: "no-store" });
+  if (!res.ok) throw new Error(`Scraped jobs: ${res.status}`);
+  const data = await res.json();
+  return (data.jobs || [])
+    .filter((j) => isDesignRole(j.title) && isTargetLocation(j.country))
+    .map((j) => ({ ...j, date: j.date ? new Date(j.date) : null }));
 }
 
 function populateFilterOptions(jobs) {
@@ -143,7 +158,7 @@ function render(jobs) {
   container.innerHTML = jobs.map((j) => `
     <div class="job-card">
       <div class="job-card-top">
-        <div class="job-avatar">${escapeHtml((j.company || "?").trim().charAt(0).toUpperCase())}</div>
+        <div class="job-avatar">${j.company && j.company.startsWith("Hidden") ? "🔒" : escapeHtml((j.company || "?").trim().charAt(0).toUpperCase())}</div>
         <div>
           <h3><a href="${encodeURI(j.url)}" target="_blank" rel="noopener">${escapeHtml(j.title)}</a></h3>
           <div class="job-company">${escapeHtml(j.company || "Unknown company")}</div>
@@ -186,7 +201,7 @@ async function loadJobs() {
   status.textContent = "Loading jobs...";
   document.getElementById("results").innerHTML = "";
 
-  const results = await Promise.allSettled([fetchJobicy(), fetchArbeitnow()]);
+  const results = await Promise.allSettled([fetchJobicy(), fetchArbeitnow(), fetchScraped()]);
   allJobs = results.filter((r) => r.status === "fulfilled").flatMap((r) => r.value);
 
   const failed = results.filter((r) => r.status === "rejected");
