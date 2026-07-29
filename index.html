@@ -7,53 +7,58 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>UI Designer Jobs</h1>
-    <p class="subtitle">Live listings pulled from public job boards</p>
-  </header>
+  <div class="page">
 
-  <section class="controls">
-    <input type="text" id="search" placeholder="Search title or company...">
+    <section class="hero">
+      <p class="overline">Live from public job boards</p>
+      <h1>Find Your Next<br>UI Design Role</h1>
+      <p class="subtitle">Remote, hybrid, and on-site UI/UX &amp; product design jobs, refreshed every time you load this page.</p>
 
-    <select id="filter-location">
-      <option value="">Any work setup</option>
-      <option value="remote">Remote / At home</option>
-      <option value="onsite">On-site</option>
-      <option value="hybrid">Hybrid</option>
-    </select>
+      <div class="search-panel">
+        <input type="text" id="search" placeholder="Search title or company...">
+        <button id="refresh">Refresh</button>
+      </div>
 
-    <select id="filter-type">
-      <option value="">Any employment type</option>
-    </select>
+      <div class="chip-row" id="filter-location" role="group" aria-label="Work setup">
+        <button class="chip active" data-value="">Any work setup</button>
+        <button class="chip" data-value="remote">Remote / At home</button>
+        <button class="chip" data-value="onsite">On-site</button>
+        <button class="chip" data-value="hybrid">Hybrid</button>
+      </div>
+    </section>
 
-    <select id="filter-country">
-      <option value="">Any country</option>
-    </select>
+    <section class="stats" id="stats"></section>
 
-    <label class="salary-toggle">
-      <input type="checkbox" id="filter-salary">
-      Only show listings with salary info
-    </label>
+    <section class="filter-bar">
+      <select id="filter-type">
+        <option value="">Any employment type</option>
+      </select>
 
-    <select id="sort-by">
-      <option value="date">Sort: Newest first</option>
-      <option value="title">Sort: Title (A-Z)</option>
-      <option value="company">Sort: Company (A-Z)</option>
-      <option value="salary">Sort: Salary (high to low)</option>
-    </select>
+      <select id="filter-country">
+        <option value="">Any country</option>
+      </select>
 
-    <button id="refresh">Refresh</button>
-  </section>
+      <button class="chip salary-chip" id="filter-salary" data-active="false">Only with salary listed</button>
 
-  <p id="status">Loading jobs...</p>
+      <select id="sort-by">
+        <option value="date">Sort: Newest first</option>
+        <option value="title">Sort: Title (A-Z)</option>
+        <option value="company">Sort: Company (A-Z)</option>
+        <option value="salary">Sort: Salary (high to low)</option>
+      </select>
+    </section>
 
-  <div id="results" class="results"></div>
+    <p id="status">Loading jobs...</p>
 
-  <footer>
-    <p>Sources: <a href="https://jobicy.com/" target="_blank" rel="noopener">Jobicy</a>,
-       <a href="https://www.arbeitnow.com/" target="_blank" rel="noopener">Arbeitnow</a>.
-       Data refreshes on page load, straight from each API.</p>
-  </footer>
+    <div id="results" class="results"></div>
+
+    <footer>
+      <p>Sources: <a href="https://jobicy.com/" target="_blank" rel="noopener">Jobicy</a>,
+         <a href="https://www.arbeitnow.com/" target="_blank" rel="noopener">Arbeitnow</a>.
+         Data refreshes on page load, straight from each API.</p>
+    </footer>
+
+  </div>
 
   <script src="app.js"></script>
 </body>

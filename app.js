@@ -13,6 +13,8 @@ const EMPLOYMENT_LABELS = {
 };
 
 let allJobs = [];
+let activeLocation = "";
+let salaryOnly = false;
 
 function escapeHtml(str) {
   return String(str ?? "").replace(/[&<>"']/g, (c) => ({
@@ -110,18 +112,16 @@ function populateFilterOptions(jobs) {
 
 function applyFiltersAndRender() {
   const search = document.getElementById("search").value.trim().toLowerCase();
-  const location = document.getElementById("filter-location").value;
   const type = document.getElementById("filter-type").value;
   const country = document.getElementById("filter-country").value;
-  const onlyWithSalary = document.getElementById("filter-salary").checked;
   const sortBy = document.getElementById("sort-by").value;
 
   let filtered = allJobs.filter((j) => {
     if (search && !`${j.title} ${j.company}`.toLowerCase().includes(search)) return false;
-    if (location && j.remoteType !== location) return false;
+    if (activeLocation && j.remoteType !== activeLocation) return false;
     if (type && j.employmentType !== type) return false;
     if (country && j.country !== country) return false;
-    if (onlyWithSalary && !j.salaryValue) return false;
+    if (salaryOnly && !j.salaryValue) return false;
     return true;
   });
 
@@ -142,8 +142,13 @@ function render(jobs) {
 
   container.innerHTML = jobs.map((j) => `
     <div class="job-card">
-      <h3><a href="${encodeURI(j.url)}" target="_blank" rel="noopener">${escapeHtml(j.title)}</a></h3>
-      <div class="job-company">${escapeHtml(j.company || "Unknown company")}</div>
+      <div class="job-card-top">
+        <div class="job-avatar">${escapeHtml((j.company || "?").trim().charAt(0).toUpperCase())}</div>
+        <div>
+          <h3><a href="${encodeURI(j.url)}" target="_blank" rel="noopener">${escapeHtml(j.title)}</a></h3>
+          <div class="job-company">${escapeHtml(j.company || "Unknown company")}</div>
+        </div>
+      </div>
       <div class="job-meta">
         <span class="tag ${escapeHtml(j.remoteType)}">${escapeHtml(j.remoteType)}</span>
         <span class="tag">${escapeHtml(j.employmentType)}</span>
@@ -152,6 +157,26 @@ function render(jobs) {
         <span class="tag">${escapeHtml(j.source)}</span>
       </div>
       <div class="job-date">${j.date ? escapeHtml(j.date.toLocaleDateString()) : ""}</div>
+    </div>
+  `).join("");
+}
+
+function renderStats(jobs) {
+  const remoteCount = jobs.filter((j) => j.remoteType === "remote").length;
+  const salaryCount = jobs.filter((j) => j.salaryValue).length;
+  const countryCount = new Set(jobs.map((j) => j.country)).size;
+
+  const stats = [
+    { label: "Jobs found", value: jobs.length },
+    { label: "Remote / at home", value: remoteCount },
+    { label: "With salary listed", value: salaryCount, highlight: true },
+    { label: "Countries", value: countryCount },
+  ];
+
+  document.getElementById("stats").innerHTML = stats.map((s) => `
+    <div class="stat-card ${s.highlight ? "highlight" : ""}">
+      <div class="stat-value">${s.value}</div>
+      <div class="stat-label">${escapeHtml(s.label)}</div>
     </div>
   `).join("");
 }
@@ -175,12 +200,29 @@ async function loadJobs() {
   }
 
   populateFilterOptions(allJobs);
+  renderStats(allJobs);
   applyFiltersAndRender();
 }
 
-["search", "filter-location", "filter-type", "filter-country", "filter-salary", "sort-by"].forEach((id) => {
+["search", "filter-type", "filter-country", "sort-by"].forEach((id) => {
   document.getElementById(id).addEventListener("input", applyFiltersAndRender);
 });
+
+document.querySelectorAll("#filter-location .chip").forEach((chip) => {
+  chip.addEventListener("click", () => {
+    document.querySelectorAll("#filter-location .chip").forEach((c) => c.classList.remove("active"));
+    chip.classList.add("active");
+    activeLocation = chip.dataset.value;
+    applyFiltersAndRender();
+  });
+});
+
+document.getElementById("filter-salary").addEventListener("click", (e) => {
+  salaryOnly = !salaryOnly;
+  e.target.dataset.active = String(salaryOnly);
+  applyFiltersAndRender();
+});
+
 document.getElementById("refresh").addEventListener("click", loadJobs);
 
 loadJobs();
