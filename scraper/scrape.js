@@ -120,15 +120,22 @@ async function scrapeDailyRemote(sourcePath, countryLabel) {
 
 async function main() {
   const allJobs = [];
+  let anySucceeded = false;
   for (const { path: sourcePath, country } of SOURCES) {
     try {
       const jobs = await scrapeDailyRemote(sourcePath, country);
       console.log(`DailyRemote (${country}): ${jobs.length} matching jobs`);
       allJobs.push(...jobs);
+      anySucceeded = true;
     } catch (err) {
       console.error(`Failed to scrape DailyRemote (${country}):`, err.message);
     }
     await sleep(1500);
+  }
+
+  if (!anySucceeded) {
+    console.error("All sources failed - leaving existing scraped-jobs.json untouched.");
+    return;
   }
 
   const outPath = path.join(__dirname, "..", "scraped-jobs.json");
