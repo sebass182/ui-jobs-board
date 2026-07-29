@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI Designer Jobs</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>UI Designer Jobs</h1>
+    <p class="subtitle">Live listings pulled from public job boards</p>
+  </header>
+
+  <section class="controls">
+    <input type="text" id="search" placeholder="Search title or company...">
+
+    <select id="filter-location">
+      <option value="">Any work setup</option>
+      <option value="remote">Remote / At home</option>
+      <option value="onsite">On-site</option>
+      <option value="hybrid">Hybrid</option>
+    </select>
+
+    <select id="filter-type">
+      <option value="">Any employment type</option>
+    </select>
+
+    <select id="filter-country">
+      <option value="">Any country</option>
+    </select>
+
+    <label class="salary-toggle">
+      <input type="checkbox" id="filter-salary">
+      Only show listings with salary info
+    </label>
+
+    <select id="sort-by">
+      <option value="date">Sort: Newest first</option>
+      <option value="title">Sort: Title (A-Z)</option>
+      <option value="company">Sort: Company (A-Z)</option>
+      <option value="salary">Sort: Salary (high to low)</option>
+    </select>
+
+    <button id="refresh">Refresh</button>
+  </section>
+
+  <p id="status">Loading jobs...</p>
+
+  <div id="results" class="results"></div>
+
+  <footer>
+    <p>Sources: <a href="https://jobicy.com/" target="_blank" rel="noopener">Jobicy</a>,
+       <a href="https://www.arbeitnow.com/" target="_blank" rel="noopener">Arbeitnow</a>.
+       Data refreshes on page load, straight from each API.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
