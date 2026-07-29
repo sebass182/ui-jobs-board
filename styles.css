@@ -34,6 +34,34 @@
   }
 }
 
+:root[data-theme="dark"] {
+  --bg: #12141c;
+  --panel: #1b2a44;
+  --card-bg: #1c1e29;
+  --navy: #eef1fb;
+  --text: #eef0f5;
+  --muted: #9198ab;
+  --border: #2a2d3a;
+  --remote-bg: #123326;
+  --hybrid-bg: #3a2c10;
+  --onsite-bg: #3a1826;
+  --shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme="light"] {
+  --bg: #f6f7fb;
+  --panel: #dcecfb;
+  --card-bg: #ffffff;
+  --navy: #16204a;
+  --text: #1c2333;
+  --muted: #6b7280;
+  --border: #e9ebf3;
+  --remote-bg: #e3f7ee;
+  --hybrid-bg: #fff1da;
+  --onsite-bg: #fde8ee;
+  --shadow: 0 10px 30px -12px rgba(22, 32, 74, 0.18);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -49,6 +77,27 @@ body {
   max-width: 1100px;
   margin: 0 auto;
   padding: 1.5rem 1.5rem 3rem;
+}
+
+#theme-toggle {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+#theme-toggle:hover {
+  opacity: 0.85;
 }
 
 .hero {
